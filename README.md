@@ -18,5 +18,13 @@ import mongoose and mongoose.connect("mongodb+srv://@leoestate.expwuff.mongodb.n
 
 creating models using mongoose
 
+and mvc mesthod creating the file and connecting to each other
+
+__Sign up route__
+
+
+
+//to encrypt us bcryptjs
+import the bcrypt in auth file
 
  
