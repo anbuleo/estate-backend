@@ -15,3 +15,8 @@ now in the terminal give start command npm start or nodemon
 Install mongoose => npm i mongoose
 INstall dotenv for environment file npm i dotenv and config()
 import mongoose and mongoose.connect("mongodb+srv://@leoestate.expwuff.mongodb.net/?retryWrites=true&w=majority")
+
+creating models using mongoose
+
+
+ 
