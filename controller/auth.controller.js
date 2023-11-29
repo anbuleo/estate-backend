@@ -3,29 +3,25 @@ import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js'
 
 let SALT = process.env.SALT
-export const signup = async(req,res) => {
+export const signup = async(req,res,next) => {
 
     const { username, email, password} = req.body
     let user = await User.findOne({email:req.body.email})
     const hashedPassword = bcryptjs.hashSync(password,SALT)
+    let newUser = new User({username,email,password:hashedPassword})
     
    try {
-        if(!user ) {
-            let newUser = new User({username,email,password:hashedPassword})
+       
+    await newUser.save()   
         res.status(201).send({
             message: 'User created successfully!!!',
             newUser
         })
-       await newUser.save()
+       
            
-        }else{
-            res.status(400).send({
-                message : 'This email already register',
-
-            })
-        }    
+          
    } catch (error) {
-    console.log(error)
+    
     next(error)
    }
     
