@@ -26,8 +26,8 @@ const app = express()
 app.use(express.json())
 
 
-app.use('/user',userRouter)
-app.use('/auth',authRouter)
+app.use('/api/user',userRouter)
+app.use('/api/auth',authRouter)
 
 app.listen(PORT,() => {
     console.log(`Server is Running on port ${PORT}`)
