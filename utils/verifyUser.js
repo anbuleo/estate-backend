@@ -3,9 +3,10 @@ import { errorHandler } from './error.js';
 
 
 export const verifyToken = (req,res,next) => {
-    let token = req.get('cookie').split("=")[1]
+    // let token = req.get('cookie').split("=")[1] //another way of parser the cookie in req
     
-    // const token = req.cookie.access_token;
+    const token = req.cookies.access_token; // after installed npm package npm i cookie-parser
+    // console.log(token)
     
     if(!token) return next(errorHandler(401, 'Unauthorised'))
 
