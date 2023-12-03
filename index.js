@@ -4,9 +4,11 @@ import dotenv from 'dotenv'
 import userRouter from './routes/user.route.js'
 import authRouter from './routes/auth.route.js'
 import cookieParser from 'cookie-parser'
+import cors from 'cors'
 
 
 dotenv.config()
+
 
 let PORT  = process.env.PORT
 let db_url = process.env.DB_URL
@@ -26,6 +28,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(cors())
 
 
 app.use('/api/user',userRouter)
