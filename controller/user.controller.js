@@ -55,9 +55,12 @@ const deleteUser = async(req,res,next) => {
 }
 
 
+
+
 export default {
     test,
     
     updateUser,
-    deleteUser
+    deleteUser,
+   
 }
