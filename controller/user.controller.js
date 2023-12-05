@@ -21,7 +21,7 @@ const  updateUser = async(req,res,next) => {
        
         if (req.body.password) {
             req.body.password =  bcryptjs.hashSync(req.body.password, 10);
-            console.log( req.body.password)
+            
           }
 
         
@@ -42,9 +42,21 @@ const  updateUser = async(req,res,next) => {
     }
 }
 
+const deleteUser = async(req,res,next) => {
+    if(req.user.id !== req.params.id) return next(errorHandler(401, 'You can only delete your own account '))
+    try {
+        await User.findByIdAndDelete(req.params.id)
+        res.status(200).json('user has been deleted')
+    } catch (error) {
+
+        next(error)
+    }
+}
 
 
 export default {
     test,
-    updateUser
+    
+    updateUser,
+    deleteUser
 }
