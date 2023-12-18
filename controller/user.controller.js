@@ -1,3 +1,4 @@
+import ListingModel from "../models/list.model.js"
 import User from "../models/user.model.js"
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
@@ -53,6 +54,21 @@ const deleteUser = async(req,res,next) => {
         next(error)
     }
 }
+const getUserListing = async(req,res,next) => {
+
+    if(req.user.id === req.params.id){
+        try {
+            const listing = await ListingModel.find({userRef : req.params.id})
+            if(listing){
+                res.status(200).json(listing)
+            }
+        } catch (error) {
+            next(error)
+        }
+    }else{
+        return next(errorHandler(401,'You can only view your own listings'))
+    }
+}
 
 
 
@@ -62,5 +78,5 @@ export default {
     
     updateUser,
     deleteUser,
-   
+    getUserListing   
 }
