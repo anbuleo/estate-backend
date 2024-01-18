@@ -70,12 +70,24 @@ const getUserListing = async(req,res,next) => {
     }
 }
 
-
+const getUser = async (req,res,next) =>{
+    // console.log(req.params.id)
+    try {
+        const user = await User.findById(req.params.id)
+        if(!user)return next(errorHandler(404,'User not found'))
+        // console.log(user)
+        const {password: pass, ...rest } = user._doc
+        // console.log(rest)
+        res.status(200).json(rest)
+    } catch (error) {
+        next(error)
+    }
+}
 
 
 export default {
     test,
-    
+    getUser,
     updateUser,
     deleteUser,
     getUserListing   
