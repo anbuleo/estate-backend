@@ -1,4 +1,5 @@
 import ListingModel from "../models/list.model.js"
+import Otp from "../models/otp.user.js"
 import User from "../models/user.model.js"
 import { errorHandler } from "../utils/error.js"
 import bcryptjs from 'bcryptjs'
@@ -83,6 +84,30 @@ const getUser = async (req,res,next) =>{
         next(error)
     }
 }
+const getAllOtps = async(req,res,next)=>{
+    try {
+        const user = await Otp.find()
+        res.status(200).send({
+            message:'All users Otp',
+            user
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+const createOtpReg = async(req,res,next)=> {
+    // console.log(req)
+    try{
+        const otps = await Otp.create(req.body)
+        // console.log(otps)
+        res.status(201).send({
+            message:'created successful',
+            otps
+        })
+    }catch(error){
+        next(error)
+    }
+}
 
 
 export default {
@@ -90,5 +115,7 @@ export default {
     getUser,
     updateUser,
     deleteUser,
-    getUserListing   
+    getUserListing,
+    createOtpReg, 
+    getAllOtps  
 }

@@ -2,8 +2,37 @@ import User from '../models/user.model.js'
 import bcryptjs from 'bcryptjs'
 import { errorHandler } from '../utils/error.js'
 import jwt from  'jsonwebtoken'
+import otpGenerator from "otp-generator"
+import nodemailer from 'nodemailer'
+import Mailgen from 'mailgen'
 
 let SALT = process.env.SALT
+
+
+let nodeConfig = {
+    host: "smtp.ethereal.email",
+    port: 587,
+  secure: false, //
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+}
+}
+let transporter = nodemailer.createTransport({
+    service : 'gmail',
+    auth : {
+        user:  process.env.EMAIL,
+        pass: process.env.PASSWORD
+    }
+})
+let MailGenerator = new Mailgen({
+    theme: "default",
+    product : {
+        name: "Mailgen",
+        link: 'https://mailgen.js/'
+    }
+})
+
 export const signup = async(req,res,next) => {
 
     const { username, email, password} = req.body
@@ -11,18 +40,65 @@ export const signup = async(req,res,next) => {
     const hashedPassword = bcryptjs.hashSync(password,SALT)
     let newUser = new User({username,email,password:hashedPassword})
     
+    // let config = {
+    //     service : 'gmail',
+    //     auth : {
+    //         user: process.env.EMAIL,
+    //         pass: process.env.PASSWORD
+    //     }
+    // }
+
+    // let transporter = nodemailer.createTransport(config);
+
+    // let MailGenerator = new Mailgen({
+    //     theme: "default",
+    //     product : {
+    //         name: "Mailgen",
+    //         link : 'https://mailgen.js/'
+    //     }
+    // })
+    
+    // let response = {
+    //     body: {
+    //         name : username,
+    //         intro:  "'Welcome to our website! We\'re very excited to have you on board.'",
+            
+    //         outro: "you have trouble? Just reply to this email, we\'d love to help."
+    //     }
+    // }
+
+    // let mail = MailGenerator.generate(response)
+
+    // let message = {
+    //     from : process.env.EMAIL,
+    //     to : email,
+    //     subject:  "welcome",
+    //     html: mail
+    // }
+
+    // transporter.sendMail(message).then(() => {
+    //     return res.status(201).json({
+    //         msg: "you should receive an email"
+    //     })
+    // })
+    
    try {
        
-    await newUser.save()   
-        res.status(201).send({
-            message: 'User created successfully!!!',
-            newUser
-        })
+    await newUser.save() 
+    let user = await User.findOne({email:req.body.email}) 
+        if(user){
+            res.status(201).send({
+                message: 'User created successfully!!!',
+                newUser,
+                user
+            })
+            return
+        }
        
            
           
    } catch (error) {
-    
+    console.log(error)
     next(error)
    }
     
