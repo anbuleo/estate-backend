@@ -108,7 +108,40 @@ const createOtpReg = async(req,res,next)=> {
         next(error)
     }
 }
+const totalotp = async(req,res,next)=>{
+    try {
+        let user = await User.find()
+        
+        res.status(200).send({
+            user,
+            
+        })
 
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getOtpId = async(req,res,next)=>{
+    try {
+        let datas = await Otp.find({ref:req.params.id})
+        // console.log(datas)
+        if(datas.length > 0){
+            res.status(200).send({
+                message:"User Had Otp",
+                datas
+            })
+        }else {
+            res.send({
+                message:"This User Does Not  had Otp",
+                datas
+            })
+        }
+        
+    } catch (error) {
+        next(error)
+    }
+}
 
 export default {
     test,
@@ -117,5 +150,7 @@ export default {
     deleteUser,
     getUserListing,
     createOtpReg, 
-    getAllOtps  
+    getAllOtps,
+    totalotp,
+    getOtpId  
 }

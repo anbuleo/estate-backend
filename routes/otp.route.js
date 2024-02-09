@@ -8,6 +8,8 @@ router.get('/verifyotp',verifyOTP)
 router.get('/getuser/:id',userController.getUser)
 router.get('/getalluserotp',userController.getAllOtps)
 router.post('/create-otplist',userController.createOtpReg)
+router.get('/gettotallotpsbyusername',userController.totalotp)
+router.get('/getotpbyid/:id',userController.getOtpId)
 
 
 
