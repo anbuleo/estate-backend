@@ -86,14 +86,17 @@ export const signup = async(req,res,next) => {
        
     await newUser.save() 
     let user = await User.findOne({email:req.body.email}) 
-        if(user){
-            res.status(201).send({
-                message: 'User created successfully!!!',
-                newUser,
-                user
-            })
-            return
-        }
+    const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
+    const {password:pass, ...rest} = user._doc
+    res.cookie('access_token',token,{httpOnly:true}).status(201).json(rest)
+        // if(user){
+        //     res.status(201).send({
+        //         message: 'User created successfully!!!',
+        //         newUser,
+        //         user
+        //     })
+        //     return
+        // }
        
            
           

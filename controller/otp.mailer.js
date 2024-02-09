@@ -70,7 +70,7 @@ let MailGenerator = new Mailgen({
 export const getUsers = async(req,res) =>{
     try {
         let username=req.params.username
-        console.log(username)
+        // console.log(username)
         let user  = await User.findOne({username})
         if(user){
             res.status(200).json(user)
@@ -86,7 +86,7 @@ export const registerMail = (req, res) => {
 
     // const { userEmail } = req.body;
     const { username, userEmail, text, subject } = req.body;
-    console.log(req.body)
+    // console.log(req.body)
 
     let config = {
         service : 'gmail',
@@ -142,11 +142,11 @@ export const generateOtps =  async (req,res)=>{
 
     
     req.app.locals.OTP = await otpGenerator.generate(4, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false})
-    console.log( req.app.locals.OTP)
+    // console.log( req.app.locals.OTP)
     res.status(201).send({ code: req.app.locals.OTP })
 }
 export async function verifyOTP(req,res){
-    console.log(req.app.locals.OTP,req.query)
+    // console.log(req.app.locals.OTP,req.query)
     const { code } = req.query;
     if(parseInt(req.app.locals.OTP) === parseInt( req.query.code)){
         req.app.locals.OTP = null; // reset the OTP value
