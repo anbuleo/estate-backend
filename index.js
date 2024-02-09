@@ -7,6 +7,7 @@ import otpRouter from './routes/otp.route.js'
 import listingRouter from './routes/list.route.js'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import bodyParser from 'body-parser'
 
 
 dotenv.config()
@@ -30,6 +31,7 @@ const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.json())
 app.use(cors())
 
 
