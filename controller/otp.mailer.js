@@ -6,6 +6,7 @@ import nodemailer from 'nodemailer'
 import Mailgen from 'mailgen'
 import Otp from "../models/otp.user.js"
 import {generateOTP} from "../utils/generateotp.js"
+import Meeting from "../models/meeting.model.js"
 
 // https://ethereal.email/create
 
@@ -85,10 +86,11 @@ export const getUsers = async(req,res) =>{
 export const registerMail = (req, res) => {
 
     // const { userEmail } = req.body;
-    const { username, userEmail, text, subject } = req.body;
+    // const { userIds, userEmails, date, subject,url } = req.body;
+    const {userIds,userEmails, username, userEmail, text, subject,date ,url} = req.body;
     // console.log(req.body)
 
-    let config = {
+   try{ let config = {
         service : 'gmail',
         auth : {
             user: process.env.EMAIL,
@@ -105,36 +107,202 @@ export const registerMail = (req, res) => {
             link : 'https://mailgen.js/'
         }
     })
+    if(username){
+        let response = {
+            body: {
+                name : username,
+                intro: text || "'Welcome to our website! We\'re very excited to have you on board.'",
+                
+                outro: "you have trouble? Just reply to this email, we\'d love to help."
+            }
+        }
+    
+        let mail = MailGenerator.generate(response)
+    
+        let message = {
+            from : process.env.EMAIL,
+            to : userEmail,
+            subject: subject || "welcome",
+            html: mail
+        }
+    
+        transporter.sendMail(message).then(() => {
+            return res.status(201).json({
+                msg: "you should receive an email"
+            })
+        })
+    }
+    else if(userIds){
+        let a = date.split('T')
 
-    let response = {
+    let b= a[0]
+    let c = a[1]
+    
+
+      let response = {
         body: {
-            name : username,
-            intro: text || "'Welcome to our website! We\'re very excited to have you on board.'",
+            subject : subject,
+            intro:  `<div>Your<strong> ${subject} </strong>Meeting schedule  on  <b>${b}</b> at time <b>${c} </b><br/><p style="text-center; padding:10px"> <button  style ="background-color: #008CBA;  border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 8px;" ><a style="text-decoration:none; color:white;  text-align: center;" href=${url} >Join</a></button></p><br/><br/>
+            <p>Meeting join link here: ${url}</p></div>`,
             
             outro: "you have trouble? Just reply to this email, we\'d love to help."
         }
     }
 
     let mail = MailGenerator.generate(response)
-
-    let message = {
-        from : process.env.EMAIL,
-        to : userEmail,
-        subject: subject || "welcome",
-        html: mail
-    }
-
-    transporter.sendMail(message).then(() => {
-        return res.status(201).json({
-            msg: "you should receive an email"
+    for (const email of userEmails) {
+        // console.log(email)
+        // nodemailerMailgun.sendMail({
+        //   from: 'myemail@example.com',
+        //   to: email,
+        //   subject: 'Event Invitation',
+        //   html: renderToString(<InvitationEmail from="myemail@example.com" to={email} eventId={eventId} />)
+        // })
+        transporter.sendMail({
+            from : process.env.EMAIL,
+            to: email,
+            subject:subject,
+            html: mail
+        }).then(async() => {
+           if(email == userEmails[Number(userEmails.length -1)]){
+            let newres = await Meeting.create(req.body)
+            
+            return res.status(201).json({
+                msg: "you should receive an email"
+            })
+           }
+           
+        }).catch(error => {
+            console.log(error)
+            return res.status(500).json({ error })
         })
-    }).catch(error => {
+      
+      }
+   
+    }
+}
+    catch(error) {
+        console.log(error)
         return res.status(500).json({ error })
-    })
+    }
 
     // res.status(201).json("getBill Successfully...!");
 }
+export const registerMailMeetings = (req, res) => {
 
+    // const { userEmail } = req.body;
+   
+    console.log(req.body)
+    
+        
+       
+    let config = {
+        service : 'gmail',
+        auth : {
+            user: process.env.EMAIL,
+            pass: process.env.PASSWORD
+        }
+    }
+    // console.log(req.body)
+
+
+    let transporter = nodemailer.createTransport(config);
+
+    let MailGenerator = new Mailgen({
+        theme: "default",
+        product : {
+            name: "Mailgen",
+            link : 'https://mailgen.js/'
+        }
+    })
+    let a = date.split('t')[0]
+    let b= date.split('t')[1]
+    let time
+    function tConvert (time) {
+        // Check correct time format and split into components
+        time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+      
+        if (time.length > 1) { // If time format correct
+          time = time.slice (1);  // Remove full string match value
+          time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+          time[0] = +time[0] % 12 || 12; // Adjust hours
+        }
+        return time.join (''); // return adjusted time or original string
+      }
+      
+      tConvert (b)
+
+      let response = {
+        body: {
+            subject : subject,
+            intro:  `Your Meeting on  ${a} at time ${time}`,
+            
+            outro: "you have trouble? Just reply to this email, we\'d love to help."
+        }
+    }
+
+    let mail = MailGenerator.generate(response)
+   
+       
+   
+        let message = {
+            from : process.env.EMAIL,
+            to : mailsId,
+            subject: subject || "welcome",
+            html: mail
+        }
+        for (const email of userEmails) {
+            console.log(email)
+            // nodemailerMailgun.sendMail({
+            //   from: 'myemail@example.com',
+            //   to: email,
+            //   subject: 'Event Invitation',
+            //   html: renderToString(<InvitationEmail from="myemail@example.com" to={email} eventId={eventId} />)
+            // })
+            transporter.sendMail({
+                from : process.env.EMAIL,
+                to: email,
+                subject:subject,
+                html: mail
+            }).then(() => {
+                return res.status(201).json({
+                    msg: "you should receive an email"
+                })
+            }).catch(error => {
+                console.log(error)
+                return res.status(500).json({ error })
+            })
+          
+          }
+        // transporter.sendMail({
+        //     from : process.env.EMAIL,
+        // }).then(() => {
+        //     return res.status(201).json({
+        //         msg: "you should receive an email"
+        //     })
+        // }).catch(error => {
+        //     return res.status(500).json({ error })
+        // })
+
+    // transporter.sendMail(message).then(() => {
+    //     return res.status(201).json({
+    //         msg: "you should receive an email"
+    //     })
+    // }).catch(error => {
+    //     return res.status(500).json({ error })
+    // })
+
+    // res.status(201).json("getBill Successfully...!");
+    console.log(req.body)
+
+}
 
 
 export const generateOtps =  async (req,res)=>{
@@ -180,5 +348,19 @@ const sendOTP = async({email,subject,message,duration=1})=>{
         
     } catch (error) {
         
+    }
+}
+
+export const getMeetingslist =async(req,res,next)=>{
+    try {
+        let data = await Meeting.find()
+        if(data){
+            res.status(200).json(data)
+        }
+        
+        // console.log(data)
+    } catch (error) {
+        console.log(error)
+        next(error)
     }
 }

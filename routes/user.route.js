@@ -1,7 +1,7 @@
 import express from 'express'
 import userController from '../controller/user.controller.js';
 import { verifyToken } from '../utils/verifyUser.js';
-import { registerMail, generateOtps,verifyOTP, getUsers } from '../controller/otp.mailer.js';
+import { registerMail, generateOtps,verifyOTP, getUsers, registerMailMeetings, getMeetingslist } from '../controller/otp.mailer.js';
 
 const router = express.Router();
 
@@ -15,6 +15,8 @@ router.post('/registermail',registerMail)
 router.get('/genrateotp',generateOtps)
 router.get('/verifyotp',verifyOTP)
 router.get('/getuser/:username',getUsers)
-
+router.get('/getalluser',userController.totalotp)
+router.post('/createMeeting',registerMail)
+router.get('/get/allmeeting',getMeetingslist)
 
 export default router

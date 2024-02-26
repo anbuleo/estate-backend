@@ -111,7 +111,6 @@ const createOtpReg = async(req,res,next)=> {
 const totalotp = async(req,res,next)=>{
     try {
         let user = await User.find()
-        
         res.status(200).send({
             user,
             
@@ -143,6 +142,15 @@ const getOtpId = async(req,res,next)=>{
     }
 }
 
+const createMeeting = async(req,res,next)=>{
+    try {
+        console.log(req.body)
+        
+    } catch (error) {
+        next(error)
+    }
+}
+
 export default {
     test,
     getUser,
@@ -152,5 +160,6 @@ export default {
     createOtpReg, 
     getAllOtps,
     totalotp,
-    getOtpId  
+    getOtpId,
+    createMeeting  
 }
