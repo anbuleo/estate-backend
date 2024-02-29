@@ -36,7 +36,8 @@ let MailGenerator = new Mailgen({
 export const signup = async(req,res,next) => {
 
     const { username, email, password} = req.body
-    let user = await User.findOne({email:req.body.email})
+    console.log(req.body)
+    // let user = await User.findOne({email:req.body.email})
     const hashedPassword = bcryptjs.hashSync(password,SALT)
     let newUser = new User({username,email,password:hashedPassword})
     
@@ -86,9 +87,11 @@ export const signup = async(req,res,next) => {
        
     await newUser.save() 
     let user = await User.findOne({email:req.body.email}) 
-    const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
+    if(user){
+        const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
     const {password:pass, ...rest} = user._doc
     res.cookie('access_token',token,{httpOnly:true}).status(201).json(rest)
+    }
         // if(user){
         //     res.status(201).send({
         //         message: 'User created successfully!!!',
