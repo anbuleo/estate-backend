@@ -25,16 +25,12 @@ try {
 }
 
 //create the app
-const corsOptions ={
-    origin:'*', 
-    credentials:true,            //access-control-allow-credentials:true
-    optionSuccessStatus:200,
- }
+
 
 const app = express()
 
 app.use(express.json())
-app.use(cors(corsOptions))
+app.use(cors())
 // app.use(cors(), function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "https://tiny-youtiao-4887c2.netlify.app"); // update to match the domain you will make the request from
 //     res.header(

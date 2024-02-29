@@ -90,7 +90,7 @@ export const signup = async(req,res,next) => {
     if(user){
         const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
     const {password:pass, ...rest} = user._doc
-    res.cookie('access_token',token,{httpOnly:true}).status(201).json(rest)
+    res.cookie('access_token',token,{httpOnly:false}).status(201).json(rest)
     }
         // if(user){
         //     res.status(201).send({
