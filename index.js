@@ -30,18 +30,16 @@ try {
 const app = express()
 
 app.use(express.json())
-app.use(cors())
-app.use((req,res,next)=>{
-    res.header('Access-Control-Allow-Origin','*');
+// app.use(cors())
+app.use(cors(), function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "https://tiny-youtiao-4887c2.netlify.app"); // update to match the domain you will make the request from
     res.header(
-        'Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,DELETE'
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
     );
-    res.header(
-        'Access-Controls-Allow-Headers',
-        'Origin, X-Requested-With,Content-Type, Accept, Authorization'
-    );
-    next()
-})
+    next();
+  })
+
 app.use(cookieParser())
 app.use(bodyParser.json())
 
