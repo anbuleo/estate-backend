@@ -31,6 +31,17 @@ const app = express()
 
 app.use(express.json())
 app.use(cors())
+app.use((req,res,next)=>{
+    res.header('Access-Control-Allow-Origin','*');
+    res.header(
+        'Access-Control-Allow-Methods','GET,HEAD,OPTIONS,POST,DELETE'
+    );
+    res.header(
+        'Access-Controls-Allow-Headers',
+        'Origin, X-Requested-With,Content-Type, Accept, Authorization'
+    );
+    next()
+})
 app.use(cookieParser())
 app.use(bodyParser.json())
 
