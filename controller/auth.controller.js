@@ -38,7 +38,7 @@ export const signup = async(req,res,next) => {
     const { username, email, password} = req.body
     console.log(req.body)
     // let user = await User.findOne({email:req.body.email})
-    const hashedPassword = bcryptjs.hashSync(password,SALT)
+    const hashedPassword = bcryptjs.hashSync(password,Number(SALT))
     let newUser = new User({username,email,password:hashedPassword})
     
     // let config = {
