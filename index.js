@@ -30,14 +30,10 @@ try {
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 app.use(cookieParser())
 app.use(bodyParser.json())
-app.use(cors({
-    origin: 'https://tiny-youtiao-4887c2.netlify.app', // use your actual domain name (or localhost), using * is not recommended
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'HEAD', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Origin', 'X-Requested-With', 'Accept', 'x-client-key', 'x-client-token', 'x-client-secret', 'Authorization'],
-    credentials: true
-}))
+
 
 
 app.use('/api/user',userRouter)
