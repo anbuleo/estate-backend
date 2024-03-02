@@ -30,6 +30,7 @@ try {
 const app = express()
 
 app.use(express.json())
+app.set("trust proxy", 1)
 app.use(cors())
 // app.use(cors(), function(req, res, next) {
 //     res.header("Access-Control-Allow-Origin", "https://tiny-youtiao-4887c2.netlify.app"); // update to match the domain you will make the request from
