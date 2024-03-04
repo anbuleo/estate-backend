@@ -90,7 +90,14 @@ export const signup = async(req,res,next) => {
     if(user){
         const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
     const {password:pass, ...rest} = user._doc
-    res.cookie('access_token',token,{httpOnly:false}).status(201).json(rest)
+    res.cookie('access_token', token, {
+        httpOnly: true, // The cookie cannot be accessed through client-side scripts
+        secure: true, // Send the cookie only over HTTPS (in a production environment)
+        sameSite: 'Strict', // Protect against CSRF attacks
+        expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
+      }).status(200).json(rest)
+    // res.cookie('access_token',token,{httpOnly:false}).status(201).json(rest)
+
     }
         // if(user){
         //     res.status(201).send({
@@ -123,7 +130,13 @@ export const signIn = async (req,res,next) => {
             expiresIn:process.env.JWT_EXPIRE
         });
         const { password: pass, ...rest} = user._doc
-        res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest)
+        res.cookie('access_token', token, {
+    httpOnly: true, // The cookie cannot be accessed through client-side scripts
+    secure: true, // Send the cookie only over HTTPS (in a production environment)
+    sameSite: 'Strict', // Protect against CSRF attacks
+    expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
+  }).status(200).json(rest)
+        // res.cookie('access_token',token,{httpOnly:true}).status(200).json(rest)
     } catch (error) {
         next(error)
     }
@@ -135,8 +148,15 @@ export const google = async (req,res,next) => {
         if(user){
             const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
             const {password:pass, ...rest} = user._doc
-            res.cookie('access_token',token,{httpOnly:false,sameSite: 'none',secure:true}).status(200).json(rest)
-            res.cookie.save()
+            res.cookie('access_token', token, {
+                httpOnly: true, // The cookie cannot be accessed through client-side scripts
+                secure: true, // Send the cookie only over HTTPS (in a production environment)
+                sameSite: 'Strict', // Protect against CSRF attacks
+                expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
+              }).status(200).json(rest)
+            
+            //res.cookie('access_token',token,{httpOnly:false,sameSite: 'none',secure:true}).status(200).json(rest)
+           
         }
         else{
             const generatedPassword =Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
@@ -145,7 +165,14 @@ export const google = async (req,res,next) => {
             await newUser.save()
             const token = jwt.sign({id: user._id},process.env.JWT_SECRET)
             const {password:pass, ...rest} = user._doc
-            res.cookie('access_token',token,{httpOnly:false,sameSite: 'none',secure:true}).status(200).json(rest)
+            res.cookie('access_token', token, {
+                httpOnly: true, // The cookie cannot be accessed through client-side scripts
+                secure: true, // Send the cookie only over HTTPS (in a production environment)
+                sameSite: 'Strict', // Protect against CSRF attacks
+                expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
+              }).status(200).json(rest)
+
+            // res.cookie('access_token',token,{httpOnly:false,sameSite: 'none',secure:true}).status(200).json(rest)
 
         }
     } catch (error) {
@@ -163,3 +190,11 @@ export const signOut = async(req,res,next)=>{
         next(error)
     }
 }
+
+/// Set the token as a cookie
+//   res.cookie('jwt', token, {
+//     httpOnly: true, // The cookie cannot be accessed through client-side scripts
+//     secure: true, // Send the cookie only over HTTPS (in a production environment)
+//     sameSite: 'Strict', // Protect against CSRF attacks
+//     expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
+//   });
