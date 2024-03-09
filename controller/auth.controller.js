@@ -95,7 +95,7 @@ export const signup = async(req,res,next) => {
         secure: true, // Send the cookie only over HTTPS (in a production environment)
         sameSite: 'Strict', // Protect against CSRF attacks
         expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
-      }).status(200).json(rest)
+      }).status(201).json(rest)
     // res.cookie('access_token',token,{httpOnly:false}).status(201).json(rest)
 
     }
