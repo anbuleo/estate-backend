@@ -151,7 +151,7 @@ export const google = async (req,res,next) => {
             res.cookie('access_token', token, {
                 httpOnly: true, // The cookie cannot be accessed through client-side scripts
                 secure: true, // Send the cookie only over HTTPS (in a production environment)
-                sameSite: 'Strict', // Protect against CSRF attacks
+                sameSite: 'none', // Protect against CSRF attacks dtrict
                 expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
               }).status(200).json(rest)
             
@@ -168,7 +168,7 @@ export const google = async (req,res,next) => {
             res.cookie('access_token', token, {
                 httpOnly: true, // The cookie cannot be accessed through client-side scripts
                 secure: true, // Send the cookie only over HTTPS (in a production environment)
-                sameSite: 'Strict', // Protect against CSRF attacks
+                sameSite: 'none', // Protect against CSRF attacks
                 expires: new Date(Date.now() + 3600000), // Cookie expiration time (1 hour in milliseconds)
               }).status(200).json(rest)
 
