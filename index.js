@@ -46,7 +46,13 @@ app.use(cors())
 
 app.use(cookieParser())
 app.use(bodyParser.json())
-
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "https://tiny-youtiao-4887c2.netlify.app");
+    res.setHeader("Access-Control-Allow-Credentials", true);
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+    next();
+  })
 
 app.use('/api/user',userRouter)
 app.use('/api/auth',authRouter)
