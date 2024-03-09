@@ -30,6 +30,8 @@ try {
 const app = express()
 
 app.use(express.json())
+app.use(cookieParser())
+app.use(bodyParser.json())
 app.set("trust proxy", 1)
 app.use(cors({ credentials: true, origin: false, exposedHeaders: ["Set-Cookie"] }))
 // app.use(cors(), function(req, res, next) {
@@ -41,8 +43,8 @@ app.use(cors({ credentials: true, origin: false, exposedHeaders: ["Set-Cookie"] 
 //     next();
 //   })
 
-app.use(cookieParser())
-app.use(bodyParser.json())
+
+
 
 
 
