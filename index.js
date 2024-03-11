@@ -48,7 +48,7 @@ app.use(cors({origin: true,
 app.use(cookieParser())
 app.use(bodyParser.json())
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.setHeader("Access-Control-Allow-Origin", "https://tiny-youtiao-4887c2.netlify.app");
     res.setHeader("Access-Control-Allow-Credentials", true);
     res.setHeader("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
